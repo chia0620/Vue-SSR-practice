@@ -7,7 +7,7 @@ export default ctx => {
     router.onReady(() => {
       const machedComponents = router.getMatchedComponents()
       if (!machedComponents.length) {
-        return reject({ code: 404 })
+        return reject(new Error({ code: 404 }))
       }
       Promise.all(machedComponents.map(component => {
         if (component.asyncData) {

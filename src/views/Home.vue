@@ -27,24 +27,16 @@ export default {
       title: 'this is home page'
     })
 
-    // const _fetch = async () => {
-    //   console.log('fetching ...')
-
-    //   const { data: res } = await axios.get('/users?page=2')
-
-    //   store.commit('setUsers', res.data)
+    // if (!fetchData.value) {
+    //   store.dispatch('fetchInitialData')
     // }
-
-    if (!fetchData.value) {
-      store.dispatch('fetchInitialData')
-    }
 
     return {
       fetchData
     }
-  },
-  async serverPrefetch () {
-    await this.$store.dispatch('fetchInitialData')
   }
+  // async serverPrefetch () {
+  //   await this.$store.dispatch('fetchInitialData')
+  // }
 }
 </script>

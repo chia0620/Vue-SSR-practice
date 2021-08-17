@@ -13,6 +13,8 @@
     "ssr:dev": "node server.js"
   },
   "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
     "@vue/compat": "^3.2.1",
     "@vue/server-renderer": "^3.1.5",
     "axios": "^0.21.1",
@@ -22,7 +24,7 @@
     "serve-favicon": "^2.5.0",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.5",
-    "vue-meta": "^2.4.0",
+    "vue-meta": "^3.0.0-alpha.7",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
     "webpack": "^4.44.2"

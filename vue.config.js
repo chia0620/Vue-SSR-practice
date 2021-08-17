@@ -3,15 +3,16 @@ const nodeExternals = require('webpack-node-externals')
 const webpack = require('webpack')
 
 module.exports = {
+  transpileDependencies: [/^vue-meta*/],
   devServer: {
     overlay: {
       warnings: false,
       errors: false
     }
   },
-  // configureWebpack: {
-  //   resolve: { mainFields: ['main', 'module'] }
-  // },
+  configureWebpack: {
+    resolve: { mainFields: ['main', 'module'] }
+  },
   chainWebpack: webpackConfig => {
     webpackConfig.module.rule('vue').uses.delete('cache-loader')
     webpackConfig.module.rule('js').uses.delete('cache-loader')
@@ -41,7 +42,14 @@ module.exports = {
       .plugin('manifest')
       .use(new WebpackManifestPlugin({ fileName: 'ssr-manifest.json' }))
 
-    webpackConfig.externals(nodeExternals({ allowlist: /\.(css|vue)$/ }))
+    webpackConfig.externals(nodeExternals({
+      allowlist: [
+        /^vue-meta*/,
+        /\.(css|sass|scss)$/,
+        /\.(vue)$/,
+        /\.(html)$/
+      ]
+    }))
 
     webpackConfig.optimization.splitChunks(false).minimize(false)
 

@@ -1,6 +1,8 @@
 import { createSSRApp, createApp, h } from 'vue'
 import App from './App.vue'
-import createRouter from './router'
+import createRouter from './router/index'
+import { createMetaManager } from 'vue-meta'
+
 import * as store from './store/index'
 
 export default function (args) {
@@ -18,11 +20,17 @@ export default function (args) {
 
   const router = createRouter()
 
+  const metaManager = createMetaManager()
+
+  app.use(metaManager)
+  // app.use(vueMetaPlugin)
   app.use(router)
   app.use(args.store)
 
   return {
     app,
-    router
+    router,
+    store,
+    metaManager
   }
 }

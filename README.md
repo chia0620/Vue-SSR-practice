@@ -31,7 +31,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 [shenron/vue3-example-ssr](https://github.com/shenron/vue3-example-ssr)   
 
 
-### 流程
+### SSR概念與流程
 * `vue.config.js`: build檔案  
 * `server.js`: server 端 run node 的檔案    
   * 使用`express` `entry-server.js` createApp 取得 app，  透過 `@vue/server-renderer` renderToString 渲染出 HTML，`@vueuse/head` renderHeadToString 渲染出相關 meta     
@@ -68,3 +68,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     _store.replaceState(window.__INITIAL_STATE__)
   }
   ```
+
+### 其他注意事項
+
+* serverPrefetch 只有當初次由 server 渲染時才會呼叫，在 client 端切換路由時不會再呼叫   
+建議在 setup 時偵測 vuex 有無資料，打API
+* vueuse/head 在 client 端切換路由時會透過 js 動態改變 meta 與 title，server 端也可以針對 serverPrefetch 取得後的資料渲染 meta 與 title。

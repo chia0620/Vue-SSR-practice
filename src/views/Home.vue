@@ -1,17 +1,19 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    {{fetchData}}
+    <img
+      alt="Vue logo"
+      src="../assets/logo.png"
+    >
+    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <!-- {{fetchData}} -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import useStore from '../store/index'
 import HelloWorld from '@/components/HelloWorld.vue'
 import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
+import { useHead } from '@vueuse/head'
 
 export default {
   name: 'Home',
@@ -23,22 +25,20 @@ export default {
 
     const fetchData = computed(() => store.state.fetchData)
 
-    useMeta({
-      title: 'this is home page'
-    })
-
-    // const _fetch = async () => {
-    //   console.log('fetching ...')
-
-    //   const { data: res } = await axios.get('/users?page=2')
-
-    //   store.commit('setUsers', res.data)
-    // }
-
     if (!fetchData.value) {
       store.dispatch('fetchInitialData')
     }
 
+    useHead({
+      // Can be static or computed
+      title: fetchData.value.per_page,
+      meta: [
+        {
+          name: 'og:title',
+          content: 'home'
+        }
+      ]
+    })
     return {
       fetchData
     }

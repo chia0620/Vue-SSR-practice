@@ -9,9 +9,10 @@ module.exports = {
       errors: false
     }
   },
-  // configureWebpack: {
-  //   resolve: { mainFields: ['main', 'module'] }
-  // },
+  // to support older browser (only support ES5)
+  configureWebpack: {
+    resolve: { mainFields: ['main', 'module'] }
+  },
   chainWebpack: webpackConfig => {
     webpackConfig.module.rule('vue').uses.delete('cache-loader')
     webpackConfig.module.rule('js').uses.delete('cache-loader')

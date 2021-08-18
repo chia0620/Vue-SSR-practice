@@ -4,6 +4,7 @@ const fs = require('fs')
 const serialize = require('serialize-javascript')
 const { renderToString } = require('@vue/server-renderer')
 const manifest = require('./dist/server/ssr-manifest.json')
+const { renderHeadToString } = require('@vueuse/head')
 
 const server = express()
 
@@ -39,7 +40,8 @@ server.get('*', async (req, res) => {
   const {
     app,
     router,
-    store
+    store,
+    head
   } = await createApp()
 
   router.push(req.url)
@@ -47,6 +49,7 @@ server.get('*', async (req, res) => {
   await router.isReady()
 
   let appContent = await renderToString(app)
+  const { headTags, htmlAttrs, bodyAttrs } = await renderHeadToString(head)
 
   fs.readFile(path.join(__dirname, '/dist/client/index.html'), (err, html) => {
     if (err) {
@@ -55,7 +58,10 @@ server.get('*', async (req, res) => {
 
     appContent = `<div id="app">${renderState(store.state, '__INITIAL_STATE__')}${appContent}</div>`
 
-    html = html.toString().replace('<div id="app"></div>', `${appContent}`)
+    html = html.toString().replace('<div id="app"></div>', appContent)
+    if (headTags) {
+      html = html.replace(/<title>.*?<\/title>/, headTags)
+    }
     res.setHeader('Content-Type', 'text/html')
     res.send(html)
   })

@@ -6,6 +6,7 @@ export default function () {
 
   const {
     router,
+    head,
     app
   } = createApp({
     store: _store
@@ -14,6 +15,7 @@ export default function () {
   return {
     app,
     router,
+    head,
     store: _store
   }
 }

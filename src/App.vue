@@ -1,11 +1,35 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">
+      Home
+    </router-link> |
+    <router-link to="/about">
+      About
+    </router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
+<script>
+import { useHead } from '@vueuse/head'
+
+export default {
+  setup () {
+    useHead({
+      // Can be static or computed
+      title: 'app.vue',
+      meta: [
+        {
+          name: 'description',
+          content: 'app description'
+        }
+      ]
+    })
+    return {
+    }
+  }
+}
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

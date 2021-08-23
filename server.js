@@ -7,6 +7,8 @@ const manifest = require('./dist/server/ssr-manifest.json')
 const { renderHeadToString } = require('@vueuse/head')
 
 const server = express()
+const port = process.env.PORT || 3000
+console.log(port)
 
 const appPath = path.join(__dirname, './dist', 'server', manifest['app.js'])
 const createApp = require(appPath).default
@@ -67,6 +69,6 @@ server.get('*', async (req, res) => {
   })
 })
 
-console.log('You can navigate to http://localhost:8001')
+console.log(`You can navigate to http://localhost:${port}`)
 
-server.listen(8001)
+server.listen(port)

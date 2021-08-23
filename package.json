@@ -10,7 +10,9 @@
     "serve": "vue-cli-service serve",
     "pressr": "npm run build",
     "ssr": "node server.js",
-    "ssr:dev": "node server.js"
+    "ssr:dev": "node server.js",
+    "dev": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@vue/compat": "^3.2.1",

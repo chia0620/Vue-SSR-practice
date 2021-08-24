@@ -3,23 +3,12 @@ const express = require('express')
 const fs = require('fs')
 const serialize = require('serialize-javascript')
 const { renderToString } = require('@vue/server-renderer')
-const manifest = require('./dist/server/ssr-manifest.json')
+const manifest = require('./home/dist/server/ssr-manifest.json')
 const { renderHeadToString } = require('@vueuse/head')
 
 const server = express()
 const port = process.env.PORT || 3000
 console.log(port)
-
-const appPath = path.join(__dirname, './dist', 'server', manifest['app.js'])
-const createApp = require(appPath).default
-
-server.use('/img', express.static(path.join(__dirname, './dist/client', 'img')))
-server.use('/js', express.static(path.join(__dirname, './dist/client', 'js')))
-server.use('/css', express.static(path.join(__dirname, './dist/client', 'css')))
-server.use(
-  '/favicon.ico',
-  express.static(path.join(__dirname, './dist/client', 'favicon.ico'))
-)
 
 const renderState = (store, windowKey) => {
   const state = serialize(store)
@@ -38,7 +27,21 @@ const renderState = (store, windowKey) => {
     : ''
 }
 
-server.get('*', async (req, res) => {
+const appPath = path.join(__dirname, './home/dist', 'server', manifest['app.js'])
+const createApp = require(appPath).default
+
+
+server.get('/home*', async (req, res) => {
+  console.log(req.url)
+
+  server.use('/img', express.static(path.join(__dirname, './home/dist/client', 'img')))
+  server.use('/js', express.static(path.join(__dirname, './home/dist/client', 'js')))
+  server.use('/css', express.static(path.join(__dirname, './home/dist/client', 'css')))
+  server.use(
+    '/favicon.ico',
+    express.static(path.join(__dirname, './home/dist/client', 'favicon.ico'))
+  )
+
   const {
     app,
     router,
@@ -53,7 +56,7 @@ server.get('*', async (req, res) => {
   let appContent = await renderToString(app)
   const { headTags, htmlAttrs, bodyAttrs } = await renderHeadToString(head)
 
-  fs.readFile(path.join(__dirname, '/dist/client/index.html'), (err, html) => {
+  fs.readFile(path.join(__dirname, '/home/dist/client/index.html'), (err, html) => {
     if (err) {
       throw err
     }
@@ -64,6 +67,18 @@ server.get('*', async (req, res) => {
     if (headTags) {
       html = html.replace(/<title>.*?<\/title>/, headTags)
     }
+    res.setHeader('Content-Type', 'text/html')
+    res.send(html)
+  })
+})
+
+server.get('/work*', async (req, res) => {
+
+  fs.readFile(path.join(__dirname, '/work/index.html'), (err, html) => {
+    if (err) {
+      throw err
+    }
+    
     res.setHeader('Content-Type', 'text/html')
     res.send(html)
   })

@@ -5,7 +5,8 @@
     </router-link> |
     <router-link to="/about">
       About
-    </router-link>
+    </router-link> |
+    <a href="/work">work</a>
   </div>
   <router-view />
 </template>

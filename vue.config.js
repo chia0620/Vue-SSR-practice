@@ -1,8 +1,10 @@
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const nodeExternals = require('webpack-node-externals')
 const webpack = require('webpack')
-
+const path = require('path');
 module.exports = {
+  publicPath: '/',
+  outputDir: "/home/dist",
   devServer: {
     overlay: {
       warnings: false,
@@ -11,7 +13,11 @@ module.exports = {
   },
   // to support older browser (only support ES5)
   configureWebpack: {
-    resolve: { mainFields: ['main', 'module'] }
+    resolve: { mainFields: ['main', 'module'] ,
+  
+    alias: {
+      '@': path.join(__dirname, 'home/src')
+    }}
   },
   chainWebpack: webpackConfig => {
     webpackConfig.module.rule('vue').uses.delete('cache-loader')
@@ -26,14 +32,14 @@ module.exports = {
       webpackConfig
         .entry('app')
         .clear()
-        .add('./src/entry-client.js')
+        .add('./home/src/entry-client.js')
       return
     }
 
     webpackConfig
       .entry('app')
       .clear()
-      .add('./src/entry-server.js')
+      .add('./home/src/entry-server.js')
 
     webpackConfig.target('node')
     webpackConfig.output.libraryTarget('commonjs2')

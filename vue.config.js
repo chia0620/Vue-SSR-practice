@@ -1,10 +1,9 @@
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const nodeExternals = require('webpack-node-externals')
 const webpack = require('webpack')
-const path = require('path');
+const path = require('path')
 module.exports = {
-  publicPath: '/',
-  outputDir: "/home/dist",
+  publicPath: '/home',
   devServer: {
     overlay: {
       warnings: false,
@@ -13,11 +12,12 @@ module.exports = {
   },
   // to support older browser (only support ES5)
   configureWebpack: {
-    resolve: { mainFields: ['main', 'module'] ,
-  
-    alias: {
-      '@': path.join(__dirname, 'home/src')
-    }}
+    resolve: {
+      mainFields: ['main', 'module'],
+      alias: {
+        '@': path.join(__dirname, 'home/src')
+      }
+    }
   },
   chainWebpack: webpackConfig => {
     webpackConfig.module.rule('vue').uses.delete('cache-loader')

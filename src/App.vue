@@ -11,20 +11,9 @@
 </template>
 
 <script>
-import { useHead } from '@vueuse/head'
 
 export default {
   setup () {
-    useHead({
-      // Can be static or computed
-      title: 'app.vue',
-      meta: [
-        {
-          name: 'description',
-          content: 'app description'
-        }
-      ]
-    })
     return {
     }
   }

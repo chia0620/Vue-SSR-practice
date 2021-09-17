@@ -7,12 +7,13 @@ const manifest = require('./dist/server/ssr-manifest.json')
 const { renderHeadToString } = require('@vueuse/head')
 
 const server = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 console.log(port)
 
 const appPath = path.join(__dirname, './dist', 'server', manifest['app.js'])
 const createApp = require(appPath).default
 
+// get doc path
 server.use('/img', express.static(path.join(__dirname, './dist/client', 'img')))
 server.use('/js', express.static(path.join(__dirname, './dist/client', 'js')))
 server.use('/css', express.static(path.join(__dirname, './dist/client', 'css')))
@@ -21,6 +22,7 @@ server.use(
   express.static(path.join(__dirname, './dist/client', 'favicon.ico'))
 )
 
+// render server state to show in body
 const renderState = (store, windowKey) => {
   const state = serialize(store)
   const autoRemove =
@@ -38,27 +40,32 @@ const renderState = (store, windowKey) => {
     : ''
 }
 
+// execute when server receive request from '*'
 server.get('*', async (req, res) => {
   const {
     app,
     router,
     store,
-    head
+    head,
+    svgContent
   } = await createApp()
 
   router.push(req.url)
 
   await router.isReady()
 
+  // render to html
   let appContent = await renderToString(app)
-  const { headTags, htmlAttrs, bodyAttrs } = await renderHeadToString(head)
+  // render to meta tags
+  const { headTags } = await renderHeadToString(head)
+  // const { headTags, htmlAttrs, bodyAttrs } = await renderHeadToString(head)
 
   fs.readFile(path.join(__dirname, '/dist/client/index.html'), (err, html) => {
     if (err) {
       throw err
     }
-
-    appContent = `<div id="app">${renderState(store.state, '__INITIAL_STATE__')}${appContent}</div>`
+    // add svgContent tags into body
+    appContent = `${svgContent}<div id="app">${renderState(store.state, '__INITIAL_STATE__')}${appContent}</div>`
 
     html = html.toString().replace('<div id="app"></div>', appContent)
     if (headTags) {

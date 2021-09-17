@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "serialize-javascript": "^6.0.0",
     "serve-favicon": "^2.5.0",
+    "svg-sprite-loader": "^6.0.9",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.5",
     "vue-meta": "^2.4.0",

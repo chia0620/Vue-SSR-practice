@@ -11,8 +11,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   request => {
-    console.log(request)
-    request.withCredentials = true
+    // console.log(request)
+    // request.withCredentials = true
     // if (request.method !== 'get') store.commit('setIsLoading', true)
     return request
   },
@@ -23,23 +23,23 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   response => {
-    console.log(response)
+    // console.log(response)
     // store.commit('setIsLoading', false)
     return response
   },
   async error => {
-    const { response } = error
-    if (response.status === 401) {
-      // router.push('/')
-    }
-    Promise.reject(error)
+    // const { response } = error
+    // if (response.status === 401) {
+    // router.push('/')
+    // }
+    // Promise.reject(error)
     // store.commit('setIsLoading', false)
     return Promise.reject(error)
   }
 )
 
-const useApi = ({ method, path, data }) => api[method](`https://reqres.in/api${path}`, data)
+const useMetaDataApi = ({ method, path, data }) => api[method](`/metadata/vb${path}`, data)
 
 export {
-  useApi
+  useMetaDataApi
 }

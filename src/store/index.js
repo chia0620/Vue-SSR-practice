@@ -1,37 +1,43 @@
 import { createStore } from 'vuex'
 import { inject, provide } from 'vue'
-import { useApi } from '@/hooks/api.js'
+import { useMetaDataApi } from '../hooks/api.js'
 
 const StoreSymbol = Symbol('vuex-store')
 
 export function _createStore () {
   return createStore({
     state: () => ({
-      fetchData: ''
+      metadata: {}
     }),
     mutations: {
-      setData: (state, { data }) => {
-        state.fetchData = data
+      setMetaData: (state, { type, data }) => {
+        state.metadata = data
       }
     },
     actions: {
-      fetchInitialData: async ({ commit }) => {
+      readMetaData: async ({ state, commit }, { payload }) => {
         const method = 'get'
-        const path = '/users?page=2'
-        // const data = {
-        //   params: {
-        //     page: 2
-        //   }
-        // }
+        const path = '/metadata'
+        const data = {
+          params: {
+            ...payload
+          }
+        }
 
-        return useApi({ method, path }).then((response) => {
-          const data = response.data
-          commit('setData', { data })
-        })
+        try {
+          const response = await useMetaDataApi({ method, path, data })
+          const metadata = response.data.data
+          console.log(response)
+          commit('setMetaData', { data: metadata })
+          return response
+        } catch (error) {
+          console.log(error)
+          return Promise.reject(error)
+        }
       }
     },
     getters: {
-      getData: state => state.fetchData
+      getMetaData: state => state.metadata
     }
   })
 }

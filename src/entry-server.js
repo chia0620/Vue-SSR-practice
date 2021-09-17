@@ -1,8 +1,10 @@
 import createApp from './app'
 import * as store from './store/index'
+import getSvgContent from '@/components/Icon.js'
 
 export default function () {
   const _store = store._createStore()
+  const svgContent = getSvgContent()
 
   const {
     router,
@@ -16,6 +18,7 @@ export default function () {
     app,
     router,
     head,
-    store: _store
+    store: _store,
+    svgContent
   }
 }
